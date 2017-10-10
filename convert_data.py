@@ -99,7 +99,7 @@ def _get_filenames_and_classes(dataset_dir):
 
 
 def _get_dataset_filename(dataset_dir, split_name, shard_id):
-  output_filename = 'flowers_%s_%05d-of-%05d.tfrecord' % (
+  output_filename = 'miotcd_%s_%05d-of-%05d.tfrecord' % (
       split_name, shard_id, _NUM_SHARDS)
   return os.path.join(dataset_dir, output_filename)
 
@@ -208,4 +208,4 @@ def run(dataset_dir):
   dataset_utils.write_label_file(labels_to_class_names, dataset_dir)
 
   _clean_up_temporary_files(dataset_dir)
-  print('\nFinished converting the Flowers dataset!')
+  print('\nFinished converting the miotcd dataset!')
