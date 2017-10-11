@@ -1,28 +1,3 @@
-# Copyright 2016 The TensorFlow Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ==============================================================================
-r"""Downloads and converts Flowers data to TFRecords of TF-Example protos.
-
-This module downloads the Flowers data, uncompresses it, reads the files
-that make up the Flowers data and creates two TFRecord datasets: one for train
-and one for test. Each TFRecord dataset is comprised of a set of TF-Example
-protocol buffers, each of which contain a single image and label.
-
-The script should take about a minute to run.
-
-"""
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -36,8 +11,12 @@ import tensorflow as tf
 
 from datasets import dataset_utils
 
-# The URL where the Flowers data can be downloaded.
-_DATA_URL = 'http://download.tensorflow.org/example_images/flower_photos.tgz'
+tf.app.flags.DEFINE_string(
+    'dataset_dir', None,
+    'The dataset directory where the dataset is stored.')
+tf.app.flags.DEFINE_string(
+    'dataset_dir_conv', None,
+    'dataset_dir_conv: The directory where the converted datasets are stored.')
 
 # The number of images in the validation set.
 _NUM_VALIDATION = 0
@@ -71,20 +50,18 @@ class ImageReader(object):
 
 def _get_filenames_and_classes(dataset_dir):
   """Returns a list of filenames and inferred class names.
-
   Args:
     dataset_dir: A directory containing a set of subdirectories representing
       class names. Each subdirectory should contain PNG or JPG encoded images.
-
   Returns:
     A list of image file paths, relative to `dataset_dir` and the list of
     subdirectories, representing class names.
   """
-  flower_root = os.path.join(dataset_dir, 'flower_photos')
+  miotcd_train_root = os.path.join(dataset_dir, 'train')
   directories = []
   class_names = []
-  for filename in os.listdir(flower_root):
-    path = os.path.join(flower_root, filename)
+  for filename in os.listdir(miotcd_train_root):
+    path = os.path.join(miotcd_train_root, filename)
     if os.path.isdir(path):
       directories.append(path)
       class_names.append(filename)
@@ -106,7 +83,6 @@ def _get_dataset_filename(dataset_dir, split_name, shard_id):
 
 def _convert_dataset(split_name, filenames, class_names_to_ids, dataset_dir):
   """Converts the given filenames to a TFRecord dataset.
-
   Args:
     split_name: The name of the dataset, either 'train' or 'validation'.
     filenames: A list of absolute paths to png or jpg images.
@@ -150,45 +126,15 @@ def _convert_dataset(split_name, filenames, class_names_to_ids, dataset_dir):
   sys.stdout.flush()
 
 
-def _clean_up_temporary_files(dataset_dir):
-  """Removes temporary files used to create the dataset.
 
-  Args:
-    dataset_dir: The directory where the temporary files are stored.
-  """
-  filename = _DATA_URL.split('/')[-1]
-  filepath = os.path.join(dataset_dir, filename)
-  tf.gfile.Remove(filepath)
-
-  tmp_dir = os.path.join(dataset_dir, 'flower_photos')
-  tf.gfile.DeleteRecursively(tmp_dir)
-
-
-def _dataset_exists(dataset_dir):
-  for split_name in ['train', 'validation']:
-    for shard_id in range(_NUM_SHARDS):
-      output_filename = _get_dataset_filename(
-          dataset_dir, split_name, shard_id)
-      if not tf.gfile.Exists(output_filename):
-        return False
-  return True
-
-
-def run(dataset_dir):
-  """Runs the download and conversion operation.
-
+def main()
+  """Runs the conversion operation.
   Args:
     dataset_dir: The dataset directory where the dataset is stored.
+    dataset_dir_conv: The directory where the converted datasets are stored.
   """
-  if not tf.gfile.Exists(dataset_dir):
-    tf.gfile.MakeDirs(dataset_dir)
 
-  if _dataset_exists(dataset_dir):
-    print('Dataset files already exist. Exiting without re-creating them.')
-    return
-
-  dataset_utils.download_and_uncompress_tarball(_DATA_URL, dataset_dir)
-  photo_filenames, class_names = _get_filenames_and_classes(dataset_dir)
+  photo_filenames, class_names = _get_filenames_and_classes(dataset_dir) #dataset_dir 
   class_names_to_ids = dict(zip(class_names, range(len(class_names))))
 
   # Divide into train and test:
@@ -199,13 +145,12 @@ def run(dataset_dir):
 
   # First, convert the training and validation sets.
   _convert_dataset('train', training_filenames, class_names_to_ids,
-                   dataset_dir)
+                   dataset_dir_conv)
   _convert_dataset('validation', validation_filenames, class_names_to_ids,
-                   dataset_dir)
+                   dataset_dir_conv)
 
   # Finally, write the labels file:
   labels_to_class_names = dict(zip(range(len(class_names)), class_names))
-  dataset_utils.write_label_file(labels_to_class_names, dataset_dir)
+  dataset_utils.write_label_file(labels_to_class_names, dataset_dir_conv)
 
-  _clean_up_temporary_files(dataset_dir)
   print('\nFinished converting the miotcd dataset!')
