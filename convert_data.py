@@ -1,3 +1,8 @@
+"""
+Useage:
+python convert_data.py --dataset_dir=/media/Store/weiliu/datasets/MIO-TCD/MIO-TCD-Classification\
+--dataset_dir_conv=/media/Store/weiliu/datasets/MIO-TCD/miotcd_classifciation_tfrecord
+"""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -9,8 +14,13 @@ import sys
 
 import tensorflow as tf
 
+
 from datasets import dataset_utils
 
+slim = tf.contrib.slim
+
+
+FLAGS = tf.app.flags.FLAGS
 tf.app.flags.DEFINE_string(
     'dataset_dir', None,
     'The dataset directory where the dataset is stored.')
@@ -126,15 +136,17 @@ def _convert_dataset(split_name, filenames, class_names_to_ids, dataset_dir):
   sys.stdout.flush()
 
 
-
-def main()
+def main(_):
   """Runs the conversion operation.
   Args:
     dataset_dir: The dataset directory where the dataset is stored.
     dataset_dir_conv: The directory where the converted datasets are stored.
   """
 
-  photo_filenames, class_names = _get_filenames_and_classes(dataset_dir) #dataset_dir 
+  dataset_dir = FLAGS.dataset_dir
+  dataset_dir_conv = FLAGS.dataset_dir_conv
+  print ("get photo_filenames and  class_names")
+  photo_filenames, class_names = _get_filenames_and_classes(dataset_dir) 
   class_names_to_ids = dict(zip(class_names, range(len(class_names))))
 
   # Divide into train and test:
@@ -154,3 +166,5 @@ def main()
   dataset_utils.write_label_file(labels_to_class_names, dataset_dir_conv)
 
   print('\nFinished converting the miotcd dataset!')
+if __name__ == '__main__':
+  tf.app.run()
