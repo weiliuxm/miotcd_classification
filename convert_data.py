@@ -1,7 +1,8 @@
 """
 Useage:
-python convert_data.py --dataset_dir=/media/Store/weiliu/datasets/MIO-TCD/MIO-TCD-Classification\
---dataset_dir_conv=/media/Store/weiliu/datasets/MIO-TCD/miotcd_classifciation_tfrecord
+python convert_data.py \
+    --dataset_dir=/media/Store/weiliu/datasets/MIO-TCD/MIO-TCD-Classification\
+    --dataset_dir_conv=/media/Store/weiliu/datasets/MIO-TCD/miotcd_classifciation_tfrecord
 """
 from __future__ import absolute_import
 from __future__ import division
