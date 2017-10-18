@@ -474,7 +474,6 @@ def main(_):
       logits, end_points = network_fn(images)
 
       labels_abv = tf.arg_max(input=labels,dimension=1,output_type=tf.int32)
-      print(labels_abv)
       #############################
       # Specify the loss function #
       #############################
