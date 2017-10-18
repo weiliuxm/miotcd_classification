@@ -19,8 +19,8 @@ from __future__ import division
 from __future__ import print_function
 
 import tensorflow as tf
-	
-from datasets import dataset_classification
+
+from datasets import dataset_factory
 from deployment import model_deploy
 from nets import nets_factory
 from preprocessing import preprocessing_factory
@@ -172,14 +172,6 @@ tf.app.flags.DEFINE_string(
 
 tf.app.flags.DEFINE_string(
     'dataset_dir', None, 'The directory where the dataset files are stored.')
-
-tf.app.flags.DEFINE_integer(
-    'num_samples', 519164, 'Number of samples.')
-tf.app.flags.DEFINE_integer(
-    'num_classes', 11, 'Number of classes.')
-tf.app.flags.DEFINE_string(
-    'labels_to_names_path', None, 'Label names file path.')
-
 
 tf.app.flags.DEFINE_integer(
     'labels_offset', 0,
@@ -410,8 +402,8 @@ def main(_):
     ######################
     # Select the dataset #
     ######################
-    dataset = dataset_classification.get_dataset(
-        FLAGS.dataset_dir, FLAGS.num_samples, FLAGS.num_classes, FLAGS.labels_to_names_path)
+    dataset = dataset_factory.get_dataset(
+        FLAGS.dataset_name, FLAGS.dataset_split_name, FLAGS.dataset_dir)
 
     ######################
     # Select the network #
