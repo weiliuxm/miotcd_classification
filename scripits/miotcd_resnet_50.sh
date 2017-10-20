@@ -9,7 +9,7 @@ NUM_SAMPLES=519164
 WEIGHT_FLAG=True
 MODEL_NAME=resnet_v2_101
 LABELS_TO_NAMES_PATH=../datasets/miotcd_labels.txt
-python train_image_classifier_miotcd.py \
+python ../train_image_classifier_miotcd.py \
     --train_dir=${TRAIN_DIR} \
     --dataset_dir=${DATASET_DIR} \
     --num_classes=${NUM_CLASSES} \
@@ -27,7 +27,7 @@ python train_image_classifier_miotcd.py \
 ##    --weights_flag=${WEIGHTS_FLAG} \
 
 
-python eval_image_classifier_miotcd.py \
+python ../eval_image_classifier_miotcd.py \
     --checkpoint_path=${TRAIN_DIR} \
     --eval_dir=${EVAL_DIR} \
     --dataset_split_name=validation \
