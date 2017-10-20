@@ -25,6 +25,14 @@ from deployment import model_deploy
 from nets import nets_factory
 from preprocessing import preprocessing_factory
 
+import numpy as np
+SIZE_TRAINING_SET = np.array([10346, 160000, 2284, 10316, 260518, 1982, 1751, 6262, 50906, 5120, 9679])
+MEDIAN_SIZE = np.median(SIZE_TRAINING_SET)
+WEIGHTS_CLASS = MEDIAN_SIZE/SIZE_TRAINING_SET
+WEIGHTS_CLASS[WEIGHTS_CLASS<0.2] = 0.2
+WEIGHTS_CLASS[WEIGHTS_CLASS>4] = 4
+
+
 slim = tf.contrib.slim
 
 tf.app.flags.DEFINE_string(
@@ -225,6 +233,11 @@ tf.app.flags.DEFINE_boolean(
     'ignore_missing_vars', False,
     'When restoring a checkpoint would ignore missing variables.')
 
+
+tf.app.flags.DEFINE_boolean(
+    'weights_flag', False,
+    'whether to define losss weights.')
+
 FLAGS = tf.app.flags.FLAGS
 
 
@@ -325,7 +338,6 @@ def _get_init_fn():
 
   Note that the init_fn is only run when initializing the model during the very
   first global step.
-
   Returns:
     An init function run by the supervisor.
   """
@@ -464,6 +476,7 @@ def main(_):
       images, labels = batch_queue.dequeue()
       logits, end_points = network_fn(images)
 
+      labels_abv = tf.arg_max(input=labels,dimension=1,output_type=tf.int32)
       #############################
       # Specify the loss function #
       #############################
@@ -472,8 +485,17 @@ def main(_):
             end_points['AuxLogits'], labels,
             label_smoothing=FLAGS.label_smoothing, weights=0.4,
             scope='aux_loss')
-      slim.losses.softmax_cross_entropy(
-          logits, labels, label_smoothing=FLAGS.label_smoothing, weights=1.0)
+      if FLAGS.weights_flag:
+          weights_loss_function = tf.gather(WEIGHTS_CLASS,labels_abv)
+          slim.losses.softmax_cross_entropy(
+                 logits, labels, label_smoothing=FLAGS.label_smoothing, weights=weights_loss_function)
+      else:
+          slim.losses.softmax_cross_entropy(
+                 logits, labels, label_smoothing=FLAGS.label_smoothing, weights=1.0)
+
+
+  #    slim.losses.softmax_cross_entropy(
+  #        logits, labels, label_smoothing=FLAGS.label_smoothing, weights=1.0)
       return end_points
 
     # Gather initial summaries.
