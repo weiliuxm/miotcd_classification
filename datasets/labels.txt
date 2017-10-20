@@ -1,0 +1,11 @@
+0:articulated_truck
+1:background
+2:bicycle
+3:bus
+4:car
+5:motorcycle
+6:non-motorized_vehicle
+7:pedestrian
+8:pickup_truck
+9:single_unit_truck
+10:work_van
