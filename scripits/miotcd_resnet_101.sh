@@ -6,7 +6,7 @@ EVAL_DIR= /home/weiliu/data/results/miotcd/classification/evaluation/resnet_v2_1
 CHECKPOINT_PATH=/home/weiliu/data/models/tensorflow/slim/resnet_v2_101_2017_04_14/resnet_v2_101.ckpt
 NUM_CLASSES=11
 NUM_SAMPLES=519164
-WEIGHT_FLAG=True
+WEIGHT_FLAG=False
 MODEL_NAME=resnet_v2_101
 LABELS_TO_NAMES_PATH=datasets/miotcd_labels.txt
 python train_image_classifier_miotcd.py \
@@ -15,16 +15,16 @@ python train_image_classifier_miotcd.py \
     --num_classes=${NUM_CLASSES} \
     --labels_to_names_path=${LABELS_TO_NAMES_PATH} \
     --num_samples=${NUM_SAMPLES} \
-    --learning_rate=0.001 \
+    --learning_rate=0.01 \
     --label_smoothing=0.1 \
     --end_learning_rate=0.00001 \
     --dataset_split_name=train \
     --batch_size=64 \
+    --weights_flag=${WEIGHTS_FLAG} \
     --model_name=${MODEL_NAME} \
     --checkpoint_path=${CHECKPOINT_PATH} \
-    --max_number_of_steps=80000 \
+    --max_number_of_steps=160000 \
     --checkpoint_exclude_scopes=${MODEL_NAME}/logits
-##    --weights_flag=${WEIGHTS_FLAG} \
 
 
 python eval_image_classifier_miotcd.py \
