@@ -56,6 +56,7 @@ def image_to_tfexample(image_data, image_format, height, width, class_id):
       'image/class/label': int64_feature(class_id),
       'image/height': int64_feature(height),
       'image/width': int64_feature(width),
+      'image/filename': bytes_feature(filename)
   }))
 
 
