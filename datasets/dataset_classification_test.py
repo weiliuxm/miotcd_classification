@@ -1,3 +1,4 @@
+#generate tfrecord files with filenames
 import os
 import tensorflow as tf
 slim = tf.contrib.slim
