@@ -1,0 +1,8 @@
+
+
+To adapt the data set 
+
+convert images:
+
+convert_data.py:
+_NUM_VALIDATION = 129795
