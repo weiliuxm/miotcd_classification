@@ -47,7 +47,7 @@ tf.app.flags.DEFINE_string(
     'eval_dir', '/tmp/tfmodel/', 'Directory where the results are saved to.')
 
 tf.app.flags.DEFINE_integer(
-    'num_preprocessing_threads', 4,
+    'num_preprocessing_threads', 8,
     'The number of threads used to create the batches.')
 
 tf.app.flags.DEFINE_string(
@@ -139,12 +139,16 @@ def main(_):
 
     image = image_preprocessing_fn(image, eval_image_size, eval_image_size)
 
-    images, labels = tf.train.batch(
-        [image, label],
+#    images, labels = tf.train.batch(
+#        [image, label],
+#        batch_size=FLAGS.batch_size,
+#        num_threads=FLAGS.num_preprocessing_threads,
+#        capacity=5 * FLAGS.batch_size)
+    images, labels, filenames = tf.train.batch(
+        [image, label, filename],
         batch_size=FLAGS.batch_size,
         num_threads=FLAGS.num_preprocessing_threads,
         capacity=5 * FLAGS.batch_size)
-
     ####################
     # Define the model #
     ####################
