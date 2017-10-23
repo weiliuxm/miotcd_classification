@@ -1,3 +1,17 @@
+# Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
 """Contains utilities for downloading and converting datasets."""
 from __future__ import absolute_import
 from __future__ import division
@@ -42,9 +56,19 @@ def image_to_tfexample(image_data, image_format, height, width, class_id):
       'image/class/label': int64_feature(class_id),
       'image/height': int64_feature(height),
       'image/width': int64_feature(width),
-      'image/filename': bytes_feature(filename)
   }))
 
+
+#for testing
+def image_to_tfexample_test(image_data, image_format, height, width, class_id, filename):
+ return tf.train.Example(features=tf.train.Features(feature={
+      'image/encoded': bytes_feature(image_data),
+      'image/format': bytes_feature(image_format),
+      'image/class/label': int64_feature(class_id),
+      'image/height': int64_feature(height),
+      'image/width': int64_feature(width),
+      'image/filename': bytes_feature(filename)
+  }))
 
 def download_and_uncompress_tarball(tarball_url, dataset_dir):
   """Downloads the `tarball_url` and uncompresses it locally.
