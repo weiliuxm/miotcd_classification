@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-"""Generic evaluation script that evaluates a model using a given dataset."""
-
+"""creat prediction results with a csv file for MIO-TCD tesing set."""
+# 
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
