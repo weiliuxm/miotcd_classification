@@ -22,7 +22,7 @@ import math
 import tensorflow as tf
 
 #from datasets import dataset_factory
-from datasets import dataset_classification_test
+from datasets import dataset_classification_test   #dataset_classification_test
 from nets import nets_factory
 from preprocessing import preprocessing_factory
 
