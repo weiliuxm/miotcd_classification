@@ -106,7 +106,7 @@ def main(_):
     ######################
 #    dataset = dataset_factory.get_dataset(
 #        FLAGS.dataset_name, FLAGS.dataset_split_name, FLAGS.dataset_dir)
-    dataset = dataset_classification.get_dataset(
+    dataset = dataset_classification_test.get_dataset(
         FLAGS.dataset_dir, FLAGS.num_samples, FLAGS.num_classes, FLAGS.labels_to_names_path)
     ####################
     # Select the model #
