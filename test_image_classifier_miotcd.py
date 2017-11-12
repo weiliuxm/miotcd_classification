@@ -16,6 +16,8 @@ tf.app.flags.DEFINE_string(
     'checkpoint file.')
 tf.app.flags.DEFINE_string(
     'test_dir', None, 'Test image directory.')
+tf.app.flags.DEFINE_string(
+    'prefix_csv', None, 'the prefix of the name of the  prediction csv file.')
 tf.app.flags.DEFINE_string('results_dir','','The directory where the prediction results are written')
 tf.app.flags.DEFINE_string('label_path','datasets/labels.txt','The path to the labels.txt')
 tf.app.flags.DEFINE_integer(
@@ -39,8 +41,6 @@ tf.app.flags.DEFINE_float(
 
 FLAGS = tf.app.flags.FLAGS
 def main(_):
-#    if not FLAGS.test_list:
-#        raise ValueError('You must supply the test list with --test_list')
 
     if not FLAGS.test_dir:
         raise  ValueError('You must supply the test image directory')
@@ -60,7 +60,11 @@ def main(_):
     class_names = [row.strip().split(':')[1] for row in labels_fd]
     print(class_names)
 
-    csv_results_file_fullname =os.path.join(FLAGS.results_dir, FLAGS.model_name+"_results_test.csv")
+    if not FLAGS.prefix_csv:
+        csv_results_file_name = FLAGS.model_name + "_results_test.csv"
+    else:
+        csv_results_file_name = FLAGS.prefix_csv+"_results_test.csv"
+    csv_results_file_fullname =os.path.join(FLAGS.results_dir, csv_results_file_name)
     print(FLAGS.results_dir)
     print(csv_results_file_fullname)
 
