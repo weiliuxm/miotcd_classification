@@ -1,5 +1,5 @@
 TRAIN_DIR=/media/weiliu/data/results/miotcd/classification/models/resnet_v2_50_ls_weighted
-LABES_TO_NAMES_PATH=/home/weiliu/tools/slim/models/research/slim/datasets/labels.txt
+#LABES_TO_NAMES_PATH=/home/weiliu/tools/slim/models/research/slim/datasets/labels.txt
 TEST_DIR=/media/weiliu/data/datasets/mio-tcd/images/test
 RESULTS_DIR=/media/weiliu/data/results/miotcd/classification/csvResults
 MODEL_NAME=resnet_v2_50
