@@ -8,7 +8,7 @@ NUM_CLASSES=11
 python test_image_classifier_miotcd.py \
     --checkpoint_path=${TRAIN_DIR} \
     --test_dir=${TEST_DIR} \
-    --prefix_csv=${PREFIX_CSV}
+    --prefix_csv=${PREFIX_CSV} \
     --num_classes=11 \
     --results_dir=${RESULTS_DIR} \
     --model_name=${MODEL_NAME}
