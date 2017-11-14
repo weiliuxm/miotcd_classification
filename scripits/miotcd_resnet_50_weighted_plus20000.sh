@@ -1,0 +1,24 @@
+DATASET_DIR=/media/weiliu/data/datasets/MIOTCD/miotcd_classification_tfrecord_plus20000
+TRAIN_DIR=/media/weiliu/data/results/miotcd/classification/models/resnet_v2_50_weighted_plus20000	
+CHECKPOINT_PATH=/media/weiliu/data/models/tf/resnet_v2_50_2017_04_14/resnet_v2_50.ckpt
+NUM_CLASSES=11
+NUM_SAMPLES=539164
+WEIGHTS_FLAG=True
+MODEL_NAME=resnet_v2_50
+LABELS_TO_NAMES_PATH=/media/weiliu/data/datasets/MIOTCD/miotcd_classification_tfrecord/labels.txt
+python train_image_classifier_miotcd.py \
+    --train_dir=${TRAIN_DIR} \
+    --dataset_dir=${DATASET_DIR} \
+    --num_classes=${NUM_CLASSES} \
+    --labels_to_names_path=${LABELS_TO_NAMES_PATH} \
+    --num_samples=${NUM_SAMPLES} \
+    --learning_rate=0.001 \
+    --end_learning_rate=0.00001 \
+    --dataset_split_name=train \
+    --batch_size=128 \
+    --label_smoothing=0 \
+    --weights_flag=${WEIGHTS_FLAG} \
+    --model_name=${MODEL_NAME} \
+    --checkpoint_path=${CHECKPOINT_PATH} \
+    --max_number_of_steps=80000 \
+    --checkpoint_exclude_scopes=${MODEL_NAME}/logits
