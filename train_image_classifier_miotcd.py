@@ -27,6 +27,7 @@ from preprocessing import preprocessing_factory
 
 import numpy as np
 SIZE_TRAINING_SET = np.array([10346, 160000, 2284, 10316, 260518, 1982, 1751, 6262, 50906, 5120, 9679])
+#SIZE_TRAINING_SET = np.array([10346, 160000, 7284, 10316, 260518, 6982, 6751, 6262, 50906, 11120, 9679])
 MEDIAN_SIZE = np.median(SIZE_TRAINING_SET)
 WEIGHTS_CLASS = MEDIAN_SIZE/SIZE_TRAINING_SET
 WEIGHTS_CLASS[WEIGHTS_CLASS<0.2] = 0.2
@@ -602,3 +603,4 @@ def main(_):
 
 if __name__ == '__main__':
   tf.app.run()
+
