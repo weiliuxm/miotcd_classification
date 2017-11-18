@@ -62,15 +62,20 @@ def main(_):
 
     if not FLAGS.prefix_csv:
         csv_results_file_name = FLAGS.model_name + "_results_test.csv"
+        csv_pro_results_file_name = FLAGS.model_name + "_pro_results_test.csv"
     else:
         csv_results_file_name = FLAGS.prefix_csv+"_results_test.csv"
-    csv_results_file_fullname =os.path.join(FLAGS.results_dir, csv_results_file_name)
+        csv_pro_results_file_name = FLAGS.prefix_csv+"_pro_results_test.csv"
+    csv_results_file_fullname = os.path.join(FLAGS.results_dir, csv_results_file_name)
+    csv_pro_results_file_fullname = os.path.join(FLAGS.results_dir, csv_pro_results_file_name)
     print(FLAGS.results_dir)
     print(csv_results_file_fullname)
+    print(csv_pro_results_file_fullname)
 
     csv_out = open(csv_results_file_fullname,'wb')
+    csv_pro_out = open(csv_pro_results_file_fullname,'wb')
     results_csv = csv.writer(csv_out,delimiter=',')
-
+    pro_results_csv = csv.writer(csv_pro_out,delimiter=',')
     with tf.Graph().as_default():
         tf_global_step = slim.get_or_create_global_step()
 
@@ -115,6 +120,7 @@ def main(_):
             variables_to_restore = slim.get_variables_to_restore()
 
         predictions = tf.argmax(logits, 1)
+        probability = tf.nn.softmax(logits)
 
         if tf.gfile.IsDirectory(FLAGS.checkpoint_path):
             checkpoint_path = tf.train.latest_checkpoint(FLAGS.checkpoint_path)
@@ -127,13 +133,13 @@ def main(_):
             init_fn(sess)
             for file_full_name in file_full_names:
                 x = open(file_full_name).read()
-                pred = sess.run(predictions, feed_dict={image_string: x})
+                pred, pro = sess.run([predictions, probability], feed_dict={image_string: x})
                 print("the predict result of {}.jpg is {}".format(file_full_name.split('/')[-1].split('.')[0],class_names[int(pred[0])]))
                 results_csv.writerow([file_full_name.split('/')[-1].split('.')[0], class_names[int(pred[0])]])
-
+                pro_results_csv.writerow([file_full_name.split('/')[-1].split('.')[0],pro[0][0], pro[0][1], pro[0][2], pro[0][3], pro[0][4], pro[0][5],
+                                         pro[0][6], pro[0][7], pro[0][8], pro[0][9], pro[0][10]])
     csv_out.close()
-
+    csv_pro_out.close()
 
 if __name__ == '__main__':
     tf.app.run()
-
