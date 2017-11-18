@@ -69,7 +69,7 @@ def main(_):
     print(csv_results_file_fullname)
 
     csv_out = open(csv_results_file_fullname,'wb')
-    results_csv = csv.writer(csv_out,delimiter='\t')
+    results_csv = csv.writer(csv_out,delimiter=',')
 
     with tf.Graph().as_default():
         tf_global_step = slim.get_or_create_global_step()
